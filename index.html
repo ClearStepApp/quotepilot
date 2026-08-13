@@ -51,6 +51,12 @@ button{border:0;border-radius:12px;padding:13px 16px;font:inherit;font-weight:80
 .quote-actions button{min-height:44px!important;border-radius:12px!important;font-weight:800!important}
 .quote-actions .print{background:#10232e!important}
 .quote-actions .copy{background:#0e8f83!important;color:#fff!important}
+</style><style>
+.saved-quotes{margin-top:14px;background:#fff;border:1px solid #dce6e4;border-radius:18px;padding:16px;box-shadow:0 8px 25px rgba(16,35,46,.06)}
+.saved-title{font-size:11px;font-weight:900;letter-spacing:1.2px;text-transform:uppercase;color:#00877e;margin-bottom:10px}
+.saved-item{display:flex;justify-content:space-between;gap:10px;align-items:center;padding:10px 0;border-top:1px solid #edf1f0;font-size:12px}
+.saved-item button{border:0;background:#edf8f5;color:#006e67;border-radius:8px;padding:7px 10px;font-weight:800;cursor:pointer}
+.quote-actions .save{background:#f2eee5;color:#674c24}
 </style></head>
 <body>
 <header><div class="nav"><div class="logo">Quote<span>Pilot</span></div><div class="badge">MVP · Cleaning Quotes</div></div></header>
@@ -149,4 +155,43 @@ $('quoteList').innerHTML=items.map(x=>`<li>${x}</li>`).join('');$('quote').class
 $('printQuote').onclick=()=>window.print();
 $('copyQuote').onclick=async()=>{let q=calculate(),text=`${q.business}\nCLEANING ESTIMATE\n${q.customer?'Prepared for: '+q.customer+'\n':''}${q.property} · ${q.beds} bed · ${q.baths} bath · ${q.sqft.toLocaleString()} sq ft\n${q.clean}\nEstimated time: ${q.hours.toFixed(1)} hours\nEstimated total: ${money(q.price)}`;try{await navigator.clipboard.writeText(text);$('copyQuote').textContent='Copied!';setTimeout(()=>$('copyQuote').textContent='Copy quote',1400)}catch(e){alert(text)}};
 calculate();
+
+function renderSavedQuotes(){
+  const list=$('savedQuoteList');
+  if(!list) return;
+  const saved=JSON.parse(localStorage.getItem('quotepilot_quotes')||'[]');
+  if(!saved.length){list.innerHTML='<div style="font-size:12px;color:#718087">No saved quotes yet.</div>';return;}
+  list.innerHTML=saved.slice(0,8).map((q,i)=>`
+    <div class="saved-item">
+      <div><b>${q.customer||'Unnamed customer'}</b><br><span>${q.property} · ${money(q.price)}</span></div>
+      <button onclick="loadSavedQuote(${i})">Load</button>
+    </div>`).join('');
+}
+function saveCurrentQuote(){
+  const q=calculate();
+  const saved=JSON.parse(localStorage.getItem('quotepilot_quotes')||'[]');
+  saved.unshift({...q,savedAt:new Date().toISOString()});
+  localStorage.setItem('quotepilot_quotes',JSON.stringify(saved.slice(0,20)));
+  $('saveQuote').textContent='Saved!';
+  setTimeout(()=>$('saveQuote').textContent='Save quote',1200);
+  renderSavedQuotes();
+}
+function loadSavedQuote(i){
+  const saved=JSON.parse(localStorage.getItem('quotepilot_quotes')||'[]');
+  const q=saved[i]; if(!q) return;
+  $('businessName').value=q.business||'';
+  $('businessContact').value=q.contact||'';
+  $('customerName').value=q.customer||'';
+  $('validDays').value=q.validDays||7;
+  if($('property')) $('property').value=q.property;
+  if($('beds')) $('beds').value=q.beds;
+  if($('baths')) $('baths').value=q.baths;
+  if($('sqft')) $('sqft').value=q.sqft;
+  if($('condition')) $('condition').value=q.condition;
+  calculate();
+  $('generate').click();
+}
+$('saveQuote').onclick=saveCurrentQuote;
+renderSavedQuotes();
+
 </script></body></html>
