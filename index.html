@@ -11,8 +11,10 @@ input,select{width:100%;padding:12px;border:1px solid #cfdad6;border-radius:11px
 .addons{display:grid;grid-template-columns:1fr 1fr;gap:9px}.check{display:flex;gap:9px;align-items:center;border:1px solid var(--line);padding:11px;border-radius:11px;font-size:13px}.check input{width:auto}
 .range{display:flex;gap:10px;align-items:center}.range output{min-width:54px;text-align:right;font-weight:800}.result{position:sticky;top:20px}.pricebox{background:var(--ink);color:#fff;border-radius:16px;padding:22px}.label{font-size:12px;opacity:.7}.price{font-size:44px;font-weight:850}.rangeprice{font-size:13px;opacity:.7}.stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:18px}.stat{border:1px solid var(--line);border-radius:13px;padding:13px}.stat b{display:block;font-size:19px}.stat span{font-size:11px;color:var(--muted)}
 .breakdown{margin-top:18px;border-top:1px solid var(--line);padding-top:14px}.row{display:flex;justify-content:space-between;padding:7px 0;font-size:14px}.row.total{font-weight:800;border-top:1px solid var(--line);margin-top:6px;padding-top:12px}
-button{border:0;border-radius:12px;padding:13px 16px;font:inherit;font-weight:800;cursor:pointer}.primary{background:var(--accent);color:#fff;width:100%;margin-top:18px}.secondary{background:var(--soft);color:#0e6d5e;width:100%;margin-top:10px}.quote{display:none;margin-top:22px}.quote.show{display:block}.quote-head{display:flex;justify-content:space-between;gap:10px;border-bottom:2px solid var(--ink);padding-bottom:14px}.quote-title{font-size:24px;font-weight:850}.quote-price{font-size:28px;font-weight:850}.quote ul{padding-left:20px;line-height:1.8}.note{font-size:12px;color:var(--muted);line-height:1.5}
+button{border:0;border-radius:12px;padding:13px 16px;font:inherit;font-weight:800;cursor:pointer}.primary{background:var(--accent);color:#fff;width:100%;margin-top:18px}.secondary{background:var(--soft);color:#0e6d5e;width:100%;margin-top:10px}.quote{display:none;margin-top:22px;border:1px solid #dce5e2;border-radius:18px;overflow:hidden;background:#fff;box-shadow:0 10px 28px #15352b12}.quote.show{display:block}.quote-top{background:linear-gradient(135deg,#10212b,#176f63);color:#fff;padding:22px}.quote-brand{font-size:12px;letter-spacing:.14em;text-transform:uppercase;font-weight:800;opacity:.78}.quote-head{display:flex;justify-content:space-between;gap:16px;align-items:flex-end;margin-top:7px}.quote-title{font-size:26px;font-weight:850}.quote-sub{font-size:13px;opacity:.75;margin-top:5px}.quote-price{text-align:right;font-size:32px;font-weight:900;white-space:nowrap}.quote-body{padding:20px}.quote-kicker{text-transform:uppercase;letter-spacing:.12em;font-size:11px;font-weight:800;color:var(--accent);margin-bottom:8px}.quote-services{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin:12px 0 18px}.quote-service{background:#f5f8f7;border:1px solid #e1e9e6;border-radius:12px;padding:11px}.quote-service b{display:block;font-size:13px}.quote-service span{font-size:11px;color:var(--muted)}.quote ul{margin:8px 0 18px;padding-left:20px;line-height:1.8;font-size:13px}.quote-total{display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--line);padding-top:15px;margin-top:12px}.quote-total span{font-weight:700}.quote-total strong{font-size:24px}.quote-footer{margin-top:18px;padding:13px;border-radius:12px;background:var(--soft);color:#155f54;font-size:12px;line-height:1.5}.quote-actions{display:flex;gap:9px;margin-top:12px}.quote-actions button{flex:1;font-size:12px}.print{background:var(--ink);color:#fff}.copy{background:var(--soft);color:#0e6d5e}.note{font-size:12px;color:var(--muted);line-height:1.5}
+@media(max-width:800px){.quote-services{grid-template-columns:1fr}.quote-head{align-items:flex-start}.quote-price{font-size:27px}}
 @media(max-width:800px){.layout{grid-template-columns:1fr}.result{position:static}h1{font-size:34px}.grid,.addons{grid-template-columns:1fr}}
+@media print{body{background:#fff}.nav,main>.intro,.layout>.card:first-child,.result>h2,.pricebox,.stats,.breakdown,.result>.secondary{display:none!important}.result{display:block!important;box-shadow:none;border:0;padding:0}.quote{display:block!important;box-shadow:none;border:1px solid #ddd;margin:0}.quote-actions{display:none!important}}
 </style></head>
 <body>
 <header><div class="nav"><div class="logo">Quote<span>Pilot</span></div><div class="badge">MVP · Cleaning Quotes</div></div></header>
@@ -47,7 +49,35 @@ button{border:0;border-radius:12px;padding:13px 16px;font:inherit;font-weight:80
 <div class="stats"><div class="stat"><b id="hours">0h</b><span>Estimated labor time</span></div><div class="stat"><b id="profit">$0</b><span>Estimated profit</span></div><div class="stat"><b id="marginResult">0%</b><span>Profit margin</span></div><div class="stat"><b id="effective">$0</b><span>Revenue / labor hour</span></div></div>
 <div class="breakdown"><div class="row"><span>Labor</span><b id="laborCost">$0</b></div><div class="row"><span>Supplies</span><b id="supCost">$0</b></div><div class="row"><span>Overhead</span><b id="overCost">$0</b></div><div class="row"><span>Travel</span><b id="travelCost">$0</b></div><div class="row"><span>Add-ons</span><b id="addonCost">$0</b></div><div class="row total"><span>Estimated cost</span><b id="totalCost">$0</b></div></div>
 <button class="secondary" id="generate">Generate customer quote</button>
-<div class="quote" id="quote"><div class="quote-head"><div><div class="quote-title">Cleaning Estimate</div><div id="quoteMeta" class="note"></div></div><div class="quote-price" id="quotePrice">$0</div></div><ul id="quoteList"></ul><p class="note">Estimated price based on the information provided. Final scope can be confirmed before service.</p></div>
+<div class="quote" id="quote">
+  <div class="quote-top">
+    <div class="quote-brand">QuotePilot · Cleaning Estimate</div>
+    <div class="quote-head">
+      <div>
+        <div class="quote-title">Your home, freshly reset.</div>
+        <div id="quoteMeta" class="quote-sub"></div>
+      </div>
+      <div class="quote-price" id="quotePrice">$0</div>
+    </div>
+  </div>
+  <div class="quote-body">
+    <div class="quote-kicker">Service summary</div>
+    <div class="quote-services">
+      <div class="quote-service"><b id="quoteService">Standard clean</b><span>Cleaning service</span></div>
+      <div class="quote-service"><b id="quoteTime">2.3 hours</b><span>Estimated time</span></div>
+      <div class="quote-service"><b id="quoteHome">1 bed · 1 bath</b><span>Property details</span></div>
+      <div class="quote-service"><b id="quoteSize">550 sq ft</b><span>Home size</span></div>
+    </div>
+    <div class="quote-kicker">What's included</div>
+    <ul id="quoteList"></ul>
+    <div class="quote-total"><span>Estimated total</span><strong id="quoteTotal">$0</strong></div>
+    <div class="quote-footer"><b>Simple, transparent pricing.</b><br>Estimated price based on the information provided. Final scope can be confirmed before service.</div>
+    <div class="quote-actions">
+      <button class="print" id="printQuote">Print / Save PDF</button>
+      <button class="copy" id="copyQuote">Copy quote</button>
+    </div>
+  </div>
+</div>
 </aside></div></main>
 <script>
 const $=id=>document.getElementById(id), money=n=>new Intl.NumberFormat('en-US',{style:'currency',currency:'USD',maximumFractionDigits:0}).format(n);
@@ -59,5 +89,24 @@ $('price').textContent=money(price);$('range').textContent=`${money(price*.92)}�
 return{price,hours,addon,beds,baths,sqft,clean:$('clean').selectedOptions[0].textContent,property:$('property').value};
 }
 $('margin').addEventListener('input',()=>{$('marginOut').textContent=$('margin').value+'%';calculate()});document.querySelectorAll('input,select').forEach(e=>e.addEventListener('input',calculate));$('calc').onclick=()=>calculate();
-$('generate').onclick=()=>{let q=calculate();$('quotePrice').textContent=money(q.price);$('quoteMeta').textContent=`${q.property} · ${q.beds} bed · ${q.baths} bath · ${q.sqft.toLocaleString()} sq ft`;$('quoteList').innerHTML=`<li>${q.clean}</li><li>Estimated ${q.hours.toFixed(1)} hours of labor</li>${q.addon?'<li>Selected add-ons included</li>':''}`;$('quote').classList.add('show')};calculate();
+$('generate').onclick=()=>{
+let q=calculate();
+$('quotePrice').textContent=money(q.price);
+$('quoteTotal').textContent=money(q.price);
+$('quoteMeta').textContent=`${q.property} · ${q.beds} bed · ${q.baths} bath`;
+$('quoteService').textContent=q.clean;
+$('quoteTime').textContent=q.hours.toFixed(1)+' hours';
+$('quoteHome').textContent=`${q.beds} bed · ${q.baths} bath`;
+$('quoteSize').textContent=q.sqft.toLocaleString()+' sq ft';
+let extras=[...document.querySelectorAll('.check input:checked')].map(x=>x.parentElement.textContent.replace(/\s*\+\$\d+/,'').trim());
+$('quoteList').innerHTML=`<li>Standard home cleaning of the listed property</li><li>Cleaning time estimated from home size, rooms and condition</li>${extras.map(x=>`<li>${x}</li>`).join('')}`;
+$('quote').classList.add('show');
+};
+$('printQuote').onclick=()=>window.print();
+$('copyQuote').onclick=async()=>{
+let q=calculate();
+let text=`Cleaning Estimate\n${q.property} · ${q.beds} bed · ${q.baths} bath · ${q.sqft.toLocaleString()} sq ft\n${q.clean}\nEstimated time: ${q.hours.toFixed(1)} hours\nEstimated total: ${money(q.price)}`;
+try{await navigator.clipboard.writeText(text);$('copyQuote').textContent='Copied!';setTimeout(()=>$('copyQuote').textContent='Copy quote',1400)}catch(e){alert(text)}
+};
+calculate();
 </script></body></html>
