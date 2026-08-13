@@ -60,13 +60,13 @@ button{border:0;border-radius:12px;padding:13px 16px;font:inherit;font-weight:80
     <div class="quote-head">
       <div>
         <div class="quote-title">Your home, freshly reset.</div>
-        <div id="quoteMeta" class="quote-sub"></div>
+        <div id="quoteMeta" class="quote-sub"></div><div class="quote-meta-line"><span class="quote-chip" id="quoteNumber"></span><span class="quote-chip" id="quoteDate"></span><span class="quote-chip" id="quoteValid"></span></div>
       </div>
       <div class="quote-price" id="quotePrice">$0</div>
     </div>
   </div>
   <div class="quote-body">
-    <div class="quote-kicker">Service summary</div>
+    <div class="quote-contact" id="quoteContact"></div><div class="quote-kicker">Service summary</div>
     <div class="quote-services">
       <div class="quote-service"><b id="quoteService">Standard clean</b><span>Cleaning service</span></div>
       <div class="quote-service"><b id="quoteTime">2.3 hours</b><span>Estimated time</span></div>
@@ -109,23 +109,5 @@ let items=[q.clean,`Home size: ${q.sqft.toLocaleString()} sq ft`,`${q.beds} bedr
 $('quoteList').innerHTML=items.map(x=>`<li>${x}</li>`).join('');$('quote').classList.add('show')};
 $('printQuote').onclick=()=>window.print();
 $('copyQuote').onclick=async()=>{let q=calculate(),text=`${q.business}\nCLEANING ESTIMATE\n${q.customer?'Prepared for: '+q.customer+'\n':''}${q.property} · ${q.beds} bed · ${q.baths} bath · ${q.sqft.toLocaleString()} sq ft\n${q.clean}\nEstimated time: ${q.hours.toFixed(1)} hours\nEstimated total: ${money(q.price)}`;try{await navigator.clipboard.writeText(text);$('copyQuote').textContent='Copied!';setTimeout(()=>$('copyQuote').textContent='Copy quote',1400)}catch(e){alert(text)}};
-calculate();
-$('quotePrice').textContent=money(q.price);
-$('quoteTotal').textContent=money(q.price);
-$('quoteMeta').textContent=`${q.property} · ${q.beds} bed · ${q.baths} bath`;
-$('quoteService').textContent=q.clean;
-$('quoteTime').textContent=q.hours.toFixed(1)+' hours';
-$('quoteHome').textContent=`${q.beds} bed · ${q.baths} bath`;
-$('quoteSize').textContent=q.sqft.toLocaleString()+' sq ft';
-let extras=[...document.querySelectorAll('.check input:checked')].map(x=>x.parentElement.textContent.replace(/\s*\+\$\d+/,'').trim());
-$('quoteList').innerHTML=`<li>Standard home cleaning of the listed property</li><li>Cleaning time estimated from home size, rooms and condition</li>${extras.map(x=>`<li>${x}</li>`).join('')}`;
-$('quote').classList.add('show');
-};
-$('printQuote').onclick=()=>window.print();
-$('copyQuote').onclick=async()=>{
-let q=calculate();
-let text=`Cleaning Estimate\n${q.property} · ${q.beds} bed · ${q.baths} bath · ${q.sqft.toLocaleString()} sq ft\n${q.clean}\nEstimated time: ${q.hours.toFixed(1)} hours\nEstimated total: ${money(q.price)}`;
-try{await navigator.clipboard.writeText(text);$('copyQuote').textContent='Copied!';setTimeout(()=>$('copyQuote').textContent='Copy quote',1400)}catch(e){alert(text)}
-};
 calculate();
 </script></body></html>
